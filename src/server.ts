@@ -14,5 +14,5 @@ server.use(express.json())
 server.use('/', Router)
 
 server.listen(SERVER_PORT, ()=> {
-    console.log('Server Started at Port 3000')
+    console.log(`Server Started at Port ${SERVER_PORT}`)
 })

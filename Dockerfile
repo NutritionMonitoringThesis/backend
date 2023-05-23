@@ -1,7 +1,6 @@
 FROM node:14.17.2-buster 
 
-WORKDIR /app/backend
-
+WORKDIR /app/
 # Copy all files
 COPY . .
 
