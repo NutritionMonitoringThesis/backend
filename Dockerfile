@@ -7,8 +7,10 @@ COPY . .
 # Install Package 
 RUN yarn 
 
+RUN yarn run bulid
+
 # Open Port 
 EXPOSE 8080
 
 # Running Backend 
-CMD [ "/bin/sh", "-c", "yarn && yarn prisma generate && yarn run prisma migrate deploy && yarn run ts-node ./prisma/seed.ts && yarn run dev"]
+CMD [ "/bin/sh", "-c", "yarn && yarn prisma generate && yarn run prisma migrate deploy && yarn run ts-node ./prisma/seed.ts && yarn run prod"]
