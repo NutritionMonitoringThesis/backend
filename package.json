@@ -1,0 +1,14 @@
+{
+  "name": "BackendStunThink",
+  "version": "1.0.0",
+  "main": "src/server.ts",
+  "repository": "git@github.com:StuntedProject/backend.git",
+  "author": "Avei20 <muhammadabdulazizalghofari@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^4.14.1",
+    "@types/express": "^4.17.17",
+    "express": "^4.18.2",
+    "prisma": "^4.14.1"
+  }
+}
