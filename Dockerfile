@@ -9,7 +9,7 @@ COPY . .
 RUN yarn 
 
 # Open Port 
-EXPOSE 8888
+EXPOSE 8080
 
 # Running Backend 
 CMD [ "/bin/sh", "-c", "yarn && yarn prisma generate && yarn run prisma migrate deploy && yarn run ts-node ./prisma/seed.ts && yarn run dev"]
