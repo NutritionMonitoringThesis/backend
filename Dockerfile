@@ -7,7 +7,7 @@ COPY . .
 # Install Package 
 RUN yarn 
 
-RUN yarn run bulid
+RUN yarn run build
 
 # Open Port 
 EXPOSE 8080

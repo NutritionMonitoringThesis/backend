@@ -1,7 +1,7 @@
 {
   "name": "backend-stunthink",
   "version": "1.0.0",
-  "main": "src/server.ts",
+  "main": "dist/server.ts",
   "repository": "git@github.com:StuntedProject/backend.git",
   "author": "Avei20 <muhammadabdulazizalghofari@gmail.com>",
   "license": "MIT",
