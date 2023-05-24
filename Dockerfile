@@ -1,6 +1,6 @@
 FROM node:14.17.2-buster 
 
-WORKDIR /app/
+WORKDIR /app
 
 # Copy all files
 COPY . .
@@ -12,6 +12,8 @@ RUN yarn build
 
 # Open Port 
 EXPOSE 8080
+
+RUN pwd
 
 # Running Backend 
 # CMD [ "/bin/sh", "-c", "yarn prisma generate && yarn run prisma migrate deploy && yarn run ts-node ./prisma/seed.ts && yarn run prod"]

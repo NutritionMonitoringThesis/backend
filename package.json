@@ -6,7 +6,7 @@
   "author": "Avei20 <muhammadabdulazizalghofari@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "prod": "node dist/server.js",
+    "prod": "node ./dist/server.js",
     "build": "yarn run tsc",
     "dev": "ts-node src/server.ts",
     "dev:server": "yarn run nodemon src/server.ts",
