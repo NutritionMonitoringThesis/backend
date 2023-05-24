@@ -14,4 +14,5 @@ RUN yarn run build
 EXPOSE 8080
 
 # Running Backend 
-CMD [ "/bin/sh", "-c", "yarn && yarn prisma generate && yarn run prisma migrate deploy && yarn run ts-node ./prisma/seed.ts && yarn run prod"]
+# CMD [ "/bin/sh", "-c", "yarn prisma generate && yarn run prisma migrate deploy && yarn run ts-node ./prisma/seed.ts && yarn run prod"]
+CMD [ "/bin/sh", "-c", "yarn run prod"]
