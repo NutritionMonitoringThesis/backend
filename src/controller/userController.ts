@@ -6,7 +6,7 @@ import * as fs from 'fs'
 
 import path from 'path'
 import { ROOT_URL } from '../constant'
-import { profileStorage } from '../middleware/function/storageList'
+// import { profileStorage } from '../middleware/function/storageList'
 const prisma = new PrismaClient()
 
 // Register 
