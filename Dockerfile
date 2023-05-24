@@ -4,6 +4,8 @@ WORKDIR /app/
 # Copy all files
 COPY . .
 
+COPY ./env.example ./.env
+
 # Install Package 
 RUN yarn 
 
