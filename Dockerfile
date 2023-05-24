@@ -13,8 +13,6 @@ RUN yarn build
 # Open Port 
 EXPOSE 8080
 
-RUN pwd
-
 # Running Backend 
 # CMD [ "/bin/sh", "-c", "yarn prisma generate && yarn run prisma migrate deploy && yarn run ts-node ./prisma/seed.ts && yarn run prod"]
-CMD [ "/bin/sh", "-c", "yarn build && yarn prod"]
+CMD [ "/bin/sh", "-c", "ls -a && yarn build && yarn prod"]
