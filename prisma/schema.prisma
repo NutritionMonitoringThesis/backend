@@ -15,8 +15,171 @@ enum JenisKelamin {
   F 
 }
 
+enum StatusKelahiran {
+  LAHIR
+  MENINGGAL 
+  KEGUGURAN 
+  BELUM
+}
+
 model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  password      String  
+  userDetails   UserDetails?
+}
+
+model UserDetails {
+  userId    String      @id 
+  user      User        @relation(fields: [userId], references: [id])
+
+  namaLengkap String
+  tempatLahir String 
+  tanggalLahir  DateTime
+  profileUrl    String?
+  jenisKelamin  JenisKelamin
+  daftarAnak    Anak[]
+  historyGizi   HistoryGizi[]
+  historyKehamilan HistoryKehamilan[]
+}
+
+model Anak {
+  id    String    @id @default(uuid())
+  jenisKelamin  JenisKelamin
+  namaLengkap   String 
+  tempatLahir   String 
+  tanggalLahir  String 
+  parentId        String 
+  parentDetail    UserDetails  @relation(fields: [parentId], references: [userId])
+  historyGiziHarian HistoryGizi[]
+  historyStunting   HistoryStunting[]
+}
+
+model HistoryGizi {
+  id      String  @id @default(uuid())
+  anakId  String? 
+  anak    Anak?       @relation(fields: [anakId], references: [id])
+  ibuId   String?
+  ibu     UserDetails? @relation(fields: [ibuId], references: [userId])
+  timastamp DateTime    @default(now())
+  namaMakanan String 
+  persentaseHabis Decimal
+  VitA                Float
+  VitB1               Float
+  VitB2               Float
+  VitB3               Float
+  VitC                Float
+  Energi              Float
+  Protein             Float
+  Lemak               Float
+  Karbohidrat         Float
+  Serat               Float
+  Air                 Float
+  Ca                  Float
+  F                   Float
+  Fe2                 Float
+  Zn2                 Float
+  Ka                  Float
+  Na                  Float
+  Cu                  Float
+}
+
+model HistoryStunting {
+  id        String    @id @default(uuid())
+  anakId    String 
+  anak      Anak    @relation(fields: [anakId], references: [id])
+  tinggiBadan Float 
+  timestamp   DateTime    @default(now())
+  result      String
+}
+
+model StandarGizi {
   id        String      @id @default(uuid())
-  username  String      @unique
-  password  String  
+  awalRentang         Int?
+  akhirRentang        Int?
+  trimester           Int?
+  satuan              String?
+  kelompok            String
+  standarGiziDetail   StandarGiziDetails?
+}
+
+model StandarGiziDetails {
+  standardGiziId      String      @id 
+  standardGizi        StandarGizi @relation(fields: [standardGiziId], references: [id])
+  tinggiBadan         Int
+  beratBadan          Float
+    VitA                Float
+  VitB1               Float
+  VitB2               Float
+  VitB3               Float
+  VitC                Float
+  Energi              Float
+  Protein             Float
+  Lemak               Float
+  Karbohidrat         Float
+  Serat               Float
+  Air                 Float
+  Ca                  Float
+  F                   Float
+  Fe2                 Float
+  Zn2                 Float
+  Ka                  Float
+  Na                  Float
+  Cu                  Float
+}
+
+model GiziMakanan {
+  id        String    @id @default(uuid())
+  namaMakanan         String 
+  beratPerPorsi       Float
+  VitA                Float
+  VitB1               Float
+  VitB2               Float
+  VitB3               Float
+  VitC                Float
+  Energi              Float
+  Protein             Float
+  Lemak               Float
+  Karbohidrat         Float
+  Serat               Float
+  Air                 Float
+  Ca                  Float
+  F                   Float
+  Fe2                 Float
+  Zn2                 Float
+  Ka                  Float
+  Na                  Float
+  Cu                  Float
+}
+
+model HistoryKehamilan {
+  id        String        @id @default(uuid())
+  userDetailId     String 
+  userDetail       UserDetails @relation(fields: [userDetailId], references: [userId])
+  tanggalHamil     DateTime
+  tanggalKelahiran  DateTime?
+  lahir             StatusKelahiran
+}
+
+model StandardStunting {
+  id        String      @id @default(uuid())
+  umur      Int 
+  gender    JenisKelamin
+  SDMinus3       Float
+  SDMinus2       Float
+  SDMinus1       Float
+  Median         Float 
+  SDPlus1        Float
+  SDPlus2        Float
+  SDPlus3        Float
+}
+
+model EducationArticle {
+  id        String        @id @default(uuid())
+  author    String 
+  title     String 
+  desc      String 
+  urlToImage  String 
+  content     String 
+  publishedAt DateTime
 }

@@ -12,7 +12,8 @@ server.use(express.urlencoded({extended :true}))
 server.use(express.json())
 
 server.use('/', Router)
-console.log(process.env)
+
+// console.log(process.env)
 
 server.listen(process.env.PORT, ()=> {
     console.log(`Server Started at Port ${SERVER_PORT}`)
