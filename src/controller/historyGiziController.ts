@@ -121,16 +121,18 @@ export const createHistoryGizi = async(req: Request, res: Response) => {
 
     const model = await tf.loadLayersModel('file://src/model/Vall_Loss_New/model.json')
     const label = [
-        'Bebek Goreng', 
-        'Beef Burger', 
-        'Cumi Cumi Goreng', 
-        'Gulai Kambing', 
-        'Mie Ayam', 
-        'Rendang Sapi', 
-        'Sayur Asem', 
-        'Semur Jengkol', 
-        'Sop Buntut', 
-        'Soto Padang', 
+        'Bebek Goreng',
+        'Beef Burger',
+        'Cumi Cumi Goreng',
+        'Gulai Kambing',
+        'Gurame Asem Manis',
+        'Mie Ayam',
+        'Pelecing Kangung',
+        'Rendang Sapi',
+        'Sayur Asem',
+        'Semur Jengkol',
+        'Sop Buntut',
+        'Soto Padang',
         'Tekwan'
     ]
 
