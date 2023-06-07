@@ -6,6 +6,7 @@ import * as fs from 'fs'
 
 import path from 'path'
 import { ROOT_URL } from '../constant'
+import { bucket } from '../middleware/utils/storageBucket'
 // import { profileStorage } from '../middleware/function/storageList'
 const prisma = new PrismaClient()
 
@@ -175,11 +176,15 @@ export const uploadPP = async (req: Request, res: Response) => {
         where : { userId : userId }
     })
 
-    // console.log(userDetail?.profileUrl !== null)
+    const baseUrl = 'https://storage.googleapis.com/stunted-bucket/'
 
     if (userDetail?.profileUrl !== null) {
         console .log('ada data lama')
-        fs.unlinkSync('./' + userDetail?.profileUrl)
+        bucket.file(userDetail?.profileUrl.replace(baseUrl, '') as string)
+        .delete()
+        .catch(err => {
+            console.log(err)
+        })
     }
 
     // res.send({message :    `masi testing`})
@@ -187,12 +192,14 @@ export const uploadPP = async (req: Request, res: Response) => {
     await prisma.userDetails.update({
         where : { userId :userId},
         data : {
-        profileUrl : path
+            profileUrl : res.locals.publicUrl
         }
-    }).then (getUserDetail => {
+    })
+    .then (() => {
         res.send({
             success: true,
             message : 'Upload Foto Profil Berhasil!'
         }) 
     })
+    
 }

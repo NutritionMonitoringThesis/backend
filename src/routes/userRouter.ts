@@ -5,6 +5,8 @@ import { getProfilePicture, register, updateUserDetail, uploadPP, userDetail } f
 import { checkToken } from "../middleware/security/checkToken";
 import { changePasswordValidator } from "../middleware/validator/loginValidator";
 import { getUserDetailValidator, registerValidator, updateUserValidator, uploadPPValidator } from "../middleware/validator/userValidator";
+import { multerMid } from "../middleware/utils/multer";
+import { userProfileUploader } from "../middleware/upload/userProfile";
 
 const userRoute = Router()
 
@@ -20,9 +22,10 @@ userRoute
 userRoute
     .route('/profile/:userId')
         .get(getProfilePicture)
-// userRoute 
-//     .route('/upload')
-//         .patch(checkToken, profileUploader.single('image'), ...uploadPPValidator,   uploadPP)
+        
+userRoute 
+    .route('/upload')
+        .patch(checkToken, multerMid.single('image'), ...uploadPPValidator, userProfileUploader, uploadPP)
 
 userRoute
     .route('/auth')

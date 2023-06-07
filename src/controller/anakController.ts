@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { JenisKelamin, Prisma, PrismaClient } from '@prisma/client'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { getId } from './authController'
 
 const prisma = new PrismaClient()
@@ -31,7 +30,7 @@ export const createAnak = (req : Request, res: Response) => {
     })
     .catch(error => {
         res.send({ error : error })
-        if (error instanceof PrismaClientKnownRequestError){
+        if (error instanceof Prisma.PrismaClientKnownRequestError){
         }
     })
 }

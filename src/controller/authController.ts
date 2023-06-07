@@ -122,7 +122,7 @@ export async function decrypt(passwordPlain : string) : Promise<string> {
 }
 
 export const getId = (token : string) => {
-    const decoded = jwt.decode(token , { complete : true} )
-    const userId = ( decoded?.payload as TOKENData ).id
+    const decoded = jwt.verify(token, JWT_KEY)
+    const userId = ( decoded as TOKENData ).id
     return userId
 }
