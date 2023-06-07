@@ -194,11 +194,7 @@ export const createHistoryGizi = async(req: Request, res: Response) => {
                 Zn2 : giziMakanan?.Zn2 as number * multiplier,
                 persentaseHabis : parseFloat(req.body.persenHabis),
                 timastamp: new Date(),
-                ibu : {
-                    connect : {
-                        userId : userId
-                    }
-                },
+                ibuId: userId
             }
         })
         .then(history => {

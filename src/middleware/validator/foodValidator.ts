@@ -4,11 +4,8 @@ import * as fs from "fs";
 import axios from "axios";
 
 export const FoodValidator = async (req : Request, res:Response, next:NextFunction) => {
-    const path = req.file?.path as string
-    var option = {
-        root : './'
-    }
-
+    const path = res.locals.publicUrl
+    
     const model = await tf.loadLayersModel('file://src/model/food5kdaffa/model.json')
     const foodLabel = ['Food', 'non-Food']
 
@@ -17,7 +14,7 @@ export const FoodValidator = async (req : Request, res:Response, next:NextFuncti
     const imageBuffer = Buffer.from(response.data, 'binary')
     
     // Preprocessing 
-    const decoded = tf.node.decodeImage(imageBuffer)
+    const decoded = tf.node.decodeImage(imageBuffer, 3)
     const resized = tf.image.resizeBilinear(decoded, [200, 200])
     const expanded = tf.expandDims(resized, 0)
     const output = model.predict(expanded) as tf.Tensor
@@ -27,8 +24,11 @@ export const FoodValidator = async (req : Request, res:Response, next:NextFuncti
     console.log(tf.argMax(output.dataSync()).dataSync())
     
     if (lobel == 'non-Food') {
-        fs.unlinkSync(`./${path}`)
-        res.send({ message : 'Tidak ada makanan terdeteksi. Mohon Foto ulang!'})
+        // fs.unlinkSync(`./${path}`)
+        res.send({ 
+            success: false,
+            message: 'Tidak ada makanan terdeteksi ya sayang. Mohon Foto ulang!'
+        })
         return
     }
     else next()
