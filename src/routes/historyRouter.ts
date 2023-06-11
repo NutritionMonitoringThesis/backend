@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { checkToken } from "../middleware/security/checkToken";
-import { createHistoryGizi, deleteHistoryGiziById, getAllHistoryGizi, getHistoryGiziByDate, getHistoryGiziById } from "../controller/historyGiziController";
+import { createHistoryGizi, deleteHistoryGiziById, detectMakanan, getAllHistoryGizi, getHistoryGiziByDate, getHistoryGiziById } from "../controller/historyGiziController";
 import { createKehamilanValidator, updateKehamilanByIdValidator } from "../middleware/validator/historyKehamilanValidator";
 import { createKehamilan, deleteHistoryKehamilanById, getAllHistoryKehamilan, updateHistoryKehamilanById } from "../controller/historyKehamilanController";
 import { createHistoryStunting, deleteHistoryStuntingById, getAllHistoryStuntingByAnakId } from "../controller/historyStuntingController";
@@ -15,6 +15,10 @@ historyRouter
     .route('/gizi')
         .get(checkToken, getAllHistoryGizi)
         .post(checkToken, multerMid.single('image'), giziUploader, FoodValidator, createHistoryGizi)
+
+historyRouter
+    .route('/detect')
+        .post(checkToken, multerMid.single('image'), giziUploader, FoodValidator, detectMakanan)
 
 historyRouter
     .route('/gizi/:id')

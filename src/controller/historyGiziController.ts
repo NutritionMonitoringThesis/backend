@@ -217,3 +217,63 @@ export const createHistoryGizi = async(req: Request, res: Response) => {
         })
     })
 }
+
+// Detect Makanan 
+export const detectMakanan = async (req: Request, res: Response) => {
+    const path = res.locals.publicUrl
+
+    const model = await tf.loadLayersModel('file://src/model/Vall_Loss_New/model.json')
+    const label = [
+        'Bebek Goreng',
+        'Beef Burger',
+        'Cumi Cumi Goreng',
+        'Gulai Kambing',
+        'Gurame Asem Manis',
+        'Mie Ayam',
+        'Pelecing Kangung',
+        'Rendang Sapi',
+        'Sayur Asem',
+        'Semur Jengkol',
+        'Sop Buntut',
+        'Soto Padang',
+        'Tekwan'
+    ]
+
+
+    // Load images from storae bucket 
+    const response = await axios.get(path, { responseType: 'arraybuffer'})
+
+    const imageBuffer = Buffer.from(response.data, 'binary')
+    // Preprocessing 
+    const decoded = tf.node.decodeImage(imageBuffer)
+    const resize = tf.image.resizeBilinear(decoded, [300, 300]).div(tf.scalar(255))
+    const expanded = tf.expandDims(resize, 0)
+
+    // Prediction 
+    const result = model.predict(expanded) as tf.Tensor
+    const labelIdx = tf.argMax(result.dataSync())
+    const classLabel = label[labelIdx.dataSync()[0]]
+
+    await prisma.giziMakanan.findFirst({
+        where: {
+            namaMakanan: classLabel,
+        }
+    })
+    .then(gizi => {
+        res.send({
+            success: true,
+            message: 'Ini Data Detail Gizinya ya bang',
+            data: {
+                dataGizi: gizi,
+                image: path,
+            },
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false, 
+            message: 'Error Occured Contact Admin'
+        })
+    })
+}
