@@ -19,7 +19,8 @@ export const getAllHistoryGizi = async (req: Request, res: Response) => {
     .then( historyGizi => {
         res.send({
             success: true,
-            message: historyGizi,
+            message: 'Inilah History Kamu',
+            data: historyGizi,
         })
     })
     .catch(err => {
