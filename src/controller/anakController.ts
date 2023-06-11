@@ -26,12 +26,17 @@ export const createAnak = (req : Request, res: Response) => {
         }
     })
     .then(userDetail => {
-        res.send({ message : `${data.namaLengkap} telah berhasil di input`})
+        res.send({ 
+            succes: true,
+            message : `${data.namaLengkap} telah berhasil di input`
+        })
     })
     .catch(error => {
-        res.send({ error : error })
-        if (error instanceof Prisma.PrismaClientKnownRequestError){
-        }
+        console.log(error)
+        res.status(500).send({ 
+            success: false,
+            message: 'Error Occoured Contact Admin' 
+        })
     })
 }
 // Update Anak 
@@ -52,37 +57,52 @@ export const updateAnak = async (req : Request, res : Response ) => {
         }
     })
     .then (anak => {
-        res.status(500).send({ message : `${anak.namaLengkap} telah berhasil di update`})
+        res.send({ 
+            success: true,
+            message : `${anak.namaLengkap} telah berhasil di update`
+        })
     })
     .catch ( err => {
         console.log(err)
-        res.send({ error : err})
+        res.status(500).send({
+            success: false,
+            message: 'Eror Occured Contact Admin',
+        })
     })
 }
 
 // Delete Anak 
 
-export const deleteAnak = (req: Request , res: Response) => {
+export const deleteAnak = async (req: Request , res: Response) => {
     const anakId = req.params.anakId
     const token = req.headers['auth'] as string
     const userId = getId(token)
 
-    prisma.anak.delete({
+    await prisma.anak.delete({
         where : {
             id : anakId
         },
     })
     .then(() => {
-        res.send({ message : `Data dengan id ${anakId} telah berhasil dihapus`})
+        res.send({
+            success: false,
+            message : `Data dengan id ${anakId} telah berhasil dihapus`
+    })
     })
     .catch(err => {
         console.log(err)
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code == 'P2015') {
-                res.status(404).send({ message : 'Not Found!'})
+                res.status(404).send({ 
+                    success:false,
+                    message : 'Not Found!'
+                })
             }
             else if (err.code == 'P2025') {
-                res.status(404).send({ message : `Data dengan id ${anakId} tidak Ditemukan`})
+                res.status(404).send({ 
+                    success: false,
+                    message : `Data dengan id ${anakId} tidak Ditemukan`
+                })
             }
         }
     })
@@ -103,9 +123,17 @@ export const getListAnak = (req : Request, res : Response) => {
     })
     .then(userDetail => {
         if (!userDetail?.daftarAnak) {
-            res.send( { message : 'Wah kamu masih belum punya anak nih ayo input data anak atau bikin anak dulu'})
+            res.send({
+                success: true,
+                message : 'Wah kamu masih belum punya anak nih ayo input data anak atau bikin anak dulu'
+            })
+            return 
         }
-        res.send(userDetail?.daftarAnak)
+        res.send({
+            success: true,
+            message: 'Ini daftar anak kamu yah kalo mau nambah bisa sama admin aja hehe.',
+            data: userDetail?.daftarAnak
+        })
     })
 }
 
@@ -118,13 +146,24 @@ export const getAnakById = (req: Request, res: Response) => {
         }
     })
     .then(anak => {
-        res.send ({ anakDetails : anak})
+        res.send ({ 
+            success: true,
+            message: 'Ini Detail anak kita yah',
+            data : anak
+        })
     })
     .catch (err => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code == 'P2015') {
                 res.status(404).send({ message : 'Not Found!'})
             }
+        }
+        else {
+            console.log(err)
+            res.status(500).send({
+                success: false,
+                message: 'Error Occured Contact Admin'
+            })
         }
     })
 }
