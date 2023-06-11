@@ -277,3 +277,59 @@ export const detectMakanan = async (req: Request, res: Response) => {
         })
     })
 }
+
+// Input History Gizi Manual 
+export const inputMakananManual  = async(req: Request, res: Response) => {
+    const data = req.body
+    const userId = getId(req.headers['auth'] as string) 
+
+    const giziMakanan = await prisma.giziMakanan.findUnique({
+        where: {
+            id: data.giziId
+        }
+    })
+
+    const patokan = giziMakanan?.beratPerPorsi as number
+    const grHabis = patokan * req.body.persenHabis
+    const multiplier = grHabis / 100
+
+    await prisma.historyGizi.create({
+        data: {
+            namaMakanan : giziMakanan?.namaMakanan as string,
+            Air : giziMakanan?.Air as number * multiplier,
+            Ca : giziMakanan?.Ca as number * multiplier,
+            Cu : giziMakanan?.Cu as number * multiplier,
+            Energi : giziMakanan?.Energi as number * multiplier,
+            F : giziMakanan?.F as number * multiplier, 
+            Fe2 : giziMakanan?.Fe2 as number * multiplier,
+            Ka : giziMakanan?.Ka as number * multiplier,
+            Karbohidrat : giziMakanan?.Karbohidrat as number * multiplier,
+            Lemak : giziMakanan?.Lemak as number * multiplier,
+            Na : giziMakanan?.Na as number * multiplier,
+            Protein : giziMakanan?.Protein as number * multiplier,
+            Serat : giziMakanan?.Serat as number * multiplier,
+            VitA : giziMakanan?.VitA as number * multiplier,
+            VitB1 : giziMakanan?.VitB1 as number * multiplier,
+            VitB2 : giziMakanan?.VitB2 as number * multiplier,
+            VitB3 : giziMakanan?.VitB3 as number * multiplier,
+            VitC : giziMakanan?.VitC as number * multiplier,
+            Zn2 : giziMakanan?.Zn2 as number * multiplier,
+            persentaseHabis : parseFloat(req.body.persenHabis),
+            timastamp: new Date(),
+            ibuId: userId
+        }
+    })
+    .then(history => {
+        res.send({
+            success: true,
+            message: 'Histry Gizi berhasil di update',
+        })
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).send({
+            success: false,
+            message: 'Error Occured Contact Admin',
+        })
+    })
+}
