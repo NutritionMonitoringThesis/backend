@@ -8,6 +8,7 @@ import { createHistoryStuntingValidator } from "../middleware/validator/historyS
 import { multerMid } from "../middleware/utils/multer";
 import { giziUploader } from "../middleware/upload/userProfile";
 import { FoodValidator } from "../middleware/validator/foodValidator";
+import { getAllHistoryGiziByAnakId, inputHistoryGiziAnakManual } from "../controller/historyGiziAnakController";
 
 const historyRouter = Router()
 
@@ -23,6 +24,11 @@ historyRouter
 historyRouter
     .route('/gizi/manual')
         .post(checkToken, inputMakananManual)
+
+historyRouter
+    .route('/gizi/anak/:id')
+        .post(checkToken, inputHistoryGiziAnakManual)
+        .get(checkToken, getAllHistoryGiziByAnakId)
 
 historyRouter
     .route('/gizi/:id')
