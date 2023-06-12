@@ -40,7 +40,8 @@ export const inputHistoryGiziAnakManual = async(req: Request, res: Response) => 
             Zn2 : giziMakanan?.Zn2 as number * multiplier,
             persentaseHabis : parseFloat(req.body.persenHabis),
             timastamp: new Date(),
-            anakId: id
+            anakId: id,
+            foodUrl: data.foodUrl
         }
     })
     .then(history => {
