@@ -62,6 +62,7 @@ model HistoryGizi {
   ibuId   String?
   ibu     UserDetails? @relation(fields: [ibuId], references: [userId])
   timastamp DateTime    @default(now())
+  foodUrl   String?
   namaMakanan String 
   persentaseHabis Decimal
   VitA                Float

@@ -32,6 +32,21 @@ export const getAllHistoryGizi = async (req: Request, res: Response) => {
     })
 }
 
+export const getStatusGiziIbuToday = async(req: Request, res: Response) => {
+    const token = req.headers['auth'] as string 
+    const userId = getId(token)
+
+    await prisma.historyGizi.groupBy({
+        where : {
+            ibuId: userId,
+            timastamp: {
+            }
+        },
+        by: ['Zn2', 'Air', 'Ca', 'Cu', 'Energi', 'F', 'Fe2', 'Ka', 'Karbohidrat', 'Lemak', 'Na', 'Protein', 'Serat', 'VitA', 'VitB1', 'VitB2', 'VitB3', "VitC"],
+
+    })
+}
+
 export const getHistoryGiziByDate = async (req: Request, res: Response) => {
     const token = req.headers['auth'] as string 
     const userId = getId(token)
@@ -48,7 +63,7 @@ export const getHistoryGiziByDate = async (req: Request, res: Response) => {
         if(historyGizi.length === 0) {
             res.status(404).send({
                 success: true, 
-                message: 'Tidak ada histary gizi pada tanggal yang dipilih'
+                message: 'Tidak ada history gizi pada tanggal yang dipilih'
             })
         }
 
@@ -316,7 +331,8 @@ export const inputMakananManual  = async(req: Request, res: Response) => {
             Zn2 : giziMakanan?.Zn2 as number * multiplier,
             persentaseHabis : parseFloat(req.body.persenHabis),
             timastamp: new Date(),
-            ibuId: userId
+            ibuId: userId,
+            foodUrl: data.foodUrl,
         }
     })
     .then(history => {
