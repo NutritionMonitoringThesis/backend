@@ -122,6 +122,7 @@ export async function decrypt(passwordPlain : string) : Promise<string> {
 }
 
 export const getId = (token : string) => {
+    // console.log('aoeuaoeuaoeu')
     const decoded = jwt.verify(token, JWT_KEY)
     const userId = ( decoded as TOKENData ).id
     return userId

@@ -6,6 +6,7 @@ import { articleRoute } from "./educationRouter";
 import testingRouter from "./testingRouter";
 import historyRouter from "./historyRouter";
 import giziRouter from "./giziMakananRouter";
+import standardGiziRouter from "./standardGiziRouter";
 
 const router = Router()
 
@@ -16,6 +17,7 @@ router.use('/education', articleRoute)
 router.use('/testing', testingRouter)
 router.use('/history', historyRouter)
 router.use( '/gizi', giziRouter)
+router.use('/standard', standardGiziRouter)
 
 router
     .get('/', (req: Request, res: Response) : void => {

@@ -9,15 +9,10 @@ const server : Express = express()
 server.disable('x-powered-by')
 server.use(allowCrossDomain)
 
-// Using Multer As Middleware 
-// server.use(multerMid.single('file'))
-
 server.use(express.urlencoded({extended :true}))
 server.use(express.json())
 
 server.use('/', Router)
-
-// console.log(process.env)
 
 server.listen(process.env.PORT, ()=> {
     console.log(`Server Started at Port ${process.env.PORT}`)

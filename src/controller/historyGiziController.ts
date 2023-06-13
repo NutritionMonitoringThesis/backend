@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getId } from "./authController";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import * as tf from '@tensorflow/tfjs-node'
 import axios from "axios";
 
@@ -47,24 +47,88 @@ export const getStatusGiziIbuToday = async(req: Request, res: Response) => {
     })
 }
 
-export const getHistoryGiziByDate = async (req: Request, res: Response) => {
+export const getHistoryGiziByTanggal = async (req: Request, res: Response) => {
     const token = req.headers['auth'] as string 
     const userId = getId(token)
+    console.log(userId)
 
-    await prisma.historyGizi.findMany({
-        where: {
+    const data = req.query
+
+    console.log(data)
+
+    let start:Date = new Date()
+    let end:Date = new Date()
+
+    console.log(typeof(data.date))
+    if (Array.isArray(data.date)) {
+        start = new Date(data.date[0] as string)
+        end = new Date(data.date[1] as string)
+    }
+
+    let whereConfig = {
+    }
+    let by 
+    
+    if(data.isAnak === `true`) {
+        whereConfig = {
+            anakId: data.id as string,
+            timastamp: {
+                gte: start,
+                lte: end,
+            }
+        }
+        by = 'anakId'
+    } 
+    else {
+        whereConfig = {
             ibuId: userId,
             timastamp: {
-                gte: new Date(req.params.date)
+                gte: start,
+                lte: end,
             }
+        }
+        by = 'ibuId'
+    }
+
+    console.log(whereConfig)
+    console.log(by)
+
+    const historyList = await prisma.historyGizi.findMany({
+        where: whereConfig,
+    })
+
+    await prisma.historyGizi.aggregate({
+        where: whereConfig,
+        // by: [by as Prisma.HistoryGiziScalarFieldEnum],
+        _sum: {
+            Air: true,
+            Ca: true,
+            Cu: true,
+            Energi: true,
+            F: true,
+            Fe2: true,
+            Ka: true,
+            Karbohidrat: true,
+            Lemak: true,
+            Na: true,
+            Protein: true,
+            Serat: true,
+            VitA: true,
+            VitB1: true,
+            VitB2: true,
+            VitB3: true,
+            VitC: true,
+            Zn2: true,
         }
     })
     .then(historyGizi => {
-        if(historyGizi.length === 0) {
+        // console.log(historyGizi)
+        if(historyList.length === 0) {
             res.status(404).send({
                 success: true, 
                 message: 'Tidak ada history gizi pada tanggal yang dipilih'
             })
+            return 
         }
 
         res.send({
@@ -349,3 +413,27 @@ export const inputMakananManual  = async(req: Request, res: Response) => {
         })
     })
 }
+
+// export const getHistoryGiziById = async (req:Request, res:Response) => {
+//     const { id } = req.params
+
+//     await prisma.historyGizi.findUnique({
+//         where: {
+//             id: id,
+//         },
+//     })
+//     .then (history => {
+//         res.send({
+//             success: true,
+//             message: 'Ini yah data gizi kamuh',
+//             data: history
+//         })
+//     })
+//     .catch(err => {
+//         console.log(err)
+//         res.status(500).send({
+//             success: false,
+//             message: 'Error Occured contact Admin'
+//         })
+//     })
+// }

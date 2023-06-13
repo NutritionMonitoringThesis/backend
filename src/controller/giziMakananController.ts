@@ -8,7 +8,7 @@ export const getAllGiziMakanan = async(req: Request, res: Response) => {
     .then(giziMakananList => {
         res.send({
             success: true,
-            message: 'Ini Yah Gizi Makanannya kalo mau pilid makanan secara manual',
+            message: 'Ini Yah Gizi Makanannya kalo mau pilih makanan secara manual',
             data: giziMakananList,
         })
     })

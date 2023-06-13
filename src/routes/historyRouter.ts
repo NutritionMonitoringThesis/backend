@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { checkToken } from "../middleware/security/checkToken";
-import { createHistoryGizi, deleteHistoryGiziById, detectMakanan, getAllHistoryGizi, getHistoryGiziByDate, getHistoryGiziById, inputMakananManual } from "../controller/historyGiziController";
+import { createHistoryGizi, deleteHistoryGiziById, detectMakanan, getAllHistoryGizi, getHistoryGiziById, getHistoryGiziByTanggal, inputMakananManual } from "../controller/historyGiziController";
 import { createKehamilanValidator, updateKehamilanByIdValidator } from "../middleware/validator/historyKehamilanValidator";
 import { createKehamilan, deleteHistoryKehamilanById, getAllHistoryKehamilan, updateHistoryKehamilanById } from "../controller/historyKehamilanController";
 import { createHistoryStunting, deleteHistoryStuntingById, getAllHistoryStuntingByAnakId } from "../controller/historyStuntingController";
@@ -36,8 +36,8 @@ historyRouter
         .delete(checkToken, deleteHistoryGiziById)
 
 historyRouter   
-    .route('/gizi/date/:date')
-        .get(checkToken, getHistoryGiziByDate)
+    .route('/status-gizi/')
+        .get(checkToken, getHistoryGiziByTanggal)
 
 historyRouter
     .route('/kehamilan')
