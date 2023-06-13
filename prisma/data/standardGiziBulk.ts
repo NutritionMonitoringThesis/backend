@@ -20,7 +20,7 @@ const parseJSON = (data:string):any => {
     }
 }
 
-
+const bulkData:Prisma.GiziMakananCreateInput[] = []
 
 
 const standardGiziListNew = () => {
