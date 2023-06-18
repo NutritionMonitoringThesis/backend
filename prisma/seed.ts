@@ -23,18 +23,18 @@ async function main () {
     // }
     // console.log ('Admin sudah dibuat jumlah :' + adminList.length)
 
-    const listGiziNew = standardGiziListNew()
-    console.log(listGiziNew)
-    for (const data of listGiziNew) {
-        console.log(data)
-        // await prisma.standarGizi.create({
-        //     data : data
-        // })
-        // .catch(err => {
-        //     console.log(err)
-        // })
-    }
-    console.log('Standard Gizi Sudah Diseed sebanyak ' + listGiziNew.length)
+    // const listGiziNew = standardGiziListNew()
+    // console.log(listGiziNew)
+    // for (const data of listGiziNew) {
+    //     console.log(data)
+    //     await prisma.standarGizi.create({
+    //         data : data
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // }
+    // console.log('Standard Gizi Sudah Diseed sebanyak ' + listGiziNew.length)
 
     // for (const data of standardGiziList) {
     //     await prisma.standarGizi.create({
