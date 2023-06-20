@@ -133,7 +133,7 @@ export const getHistoryGiziByTanggal = async (req: Request, res: Response) => {
 
         res.send({
             success: true,
-            message: 'Ini data historynya ya sayang. Mwah',
+            message: 'Ini data historynya kamu pada tanggal sekian.',
             data: historyGizi,
         })
     })
@@ -341,7 +341,7 @@ export const detectMakanan = async (req: Request, res: Response) => {
     .then(gizi => {
         res.send({
             success: true,
-            message: 'Ini Data Detail Gizinya ya bang',
+            message: 'Ini Data Detail Gizinya yah.',
             data: {
                 dataGizi: gizi,
                 image: path,

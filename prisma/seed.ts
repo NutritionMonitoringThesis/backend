@@ -65,15 +65,15 @@ async function main () {
     //     })
     // }
 
-    // console.log(`Artikel telah di input sebanyak ${educationArticleList.length} buah artikel penuh Hoax!`)
-    // for (const data of educationArticleList) {
-    //     await prisma.educationArticle.create({
-    //         data : data
-    //     })
-    //     .catch(err => {
-    //         console.log(err)
-    //     })
-    // }
+    console.log(`Artikel telah di input sebanyak ${educationArticleList.length} buah artikel penuh Hoax!`)
+    for (const data of educationArticleList) {
+        await prisma.educationArticle.create({
+            data : data
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 }
 
 main ()

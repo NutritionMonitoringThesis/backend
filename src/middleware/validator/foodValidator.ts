@@ -27,7 +27,7 @@ export const FoodValidator = async (req : Request, res:Response, next:NextFuncti
         // fs.unlinkSync(`./${path}`)
         res.send({ 
             success: false,
-            message: 'Tidak ada makanan terdeteksi ya sayang. Mohon Foto ulang!'
+            message: 'Tidak ada makanan terdeteksi. Mohon Foto ulang!'
         })
         return
     }
