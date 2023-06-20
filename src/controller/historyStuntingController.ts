@@ -36,8 +36,11 @@ export const createHistoryStunting = async(req: Request, res: Response) => {
     const sdplus3 = standarStunting?.SDPlus3 || 0
     let status = ''
 
-    if (sdminus2 == 0 || sdminus3 == 0 || sdplus3 == 0) {
-        res.status(404).send({ message : 'Wah ga ada data stuting nya nih'})
+    if (sdminus2 === 0 || sdminus3 === 0 || sdplus3 === 0) {
+        res.status(404).send({ 
+            success: false,
+            message : 'Wah ga ada data stuting nya nih, mungkin anaknya udah terlalu tua atau terlalu muda sampe umurnya minus hehe.'
+        })
         return
     }
     if (tinggiBadan < sdminus3 ) {

@@ -27,7 +27,7 @@ export const createAnak = (req : Request, res: Response) => {
     })
     .then(userDetail => {
         res.send({ 
-            succes: true,
+            success: true,
             message : `${data.namaLengkap} telah berhasil di input`
         })
     })
