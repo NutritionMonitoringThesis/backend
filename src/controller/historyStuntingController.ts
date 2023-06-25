@@ -61,7 +61,7 @@ export const createHistoryStunting = async(req: Request, res: Response) => {
     await prisma.historyStunting.create({
         data: {
             result: status,
-            tinggiBadan: tinggiBadan,
+            tinggiBadan: parseFloat(tinggiBadan),
             anakId: anakId,
         }
     })
