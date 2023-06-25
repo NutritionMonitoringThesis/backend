@@ -76,7 +76,10 @@ export const getAllHistoryKehamilan = async(req: Request, res:Response) => {
             userDetail: {
                 userId: userId
             }
-        }
+        },
+        orderBy: {
+            tanggalHamil: 'desc',
+        },
     })
     .then(historyKehamilan => {
         if(historyKehamilan.length === 0) {

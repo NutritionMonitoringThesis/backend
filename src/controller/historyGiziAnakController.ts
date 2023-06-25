@@ -68,6 +68,9 @@ export const getAllHistoryGiziByAnakId = async (req: Request, res: Response) => 
         where: {
             anakId: id,
         },
+        orderBy: {
+            timastamp: 'desc',
+        }
     })
     .then( historyGizi => {
         res.send({

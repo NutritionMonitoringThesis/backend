@@ -88,7 +88,7 @@ export const deleteHistoryStuntingById = async (req: Request, res: Response) => 
     await prisma.historyStunting.delete({
         where: {
             id: id ,
-        }
+        },
     })
     .then(history => {
         res.send({
@@ -110,6 +110,9 @@ export const getAllHistoryStuntingByAnakId = async (req: Request, res: Response)
     await prisma.historyStunting.findMany({
         where: { 
             anakId: anakId,
+        },
+        orderBy: {
+            timestamp: 'desc',
         }
     })
     .then(history => {
