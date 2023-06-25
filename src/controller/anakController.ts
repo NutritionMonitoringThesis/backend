@@ -109,30 +109,31 @@ export const deleteAnak = async (req: Request , res: Response) => {
 }
 
 // Read Daftar Anak All 
-export const getListAnak = (req : Request, res : Response) => {
+export const getListAnak = async (req : Request, res : Response) => {
     const token = req.headers['auth'] as string || req.headers.authorization as string
     const userId = getId(token)
 
-    prisma.userDetails.findUnique({
+    await prisma.anak.findMany({
         where :{
-            userId : userId 
+            parentId : userId 
         },
-        include : {
-            daftarAnak : true
+        orderBy: {
+            tanggalLahir: 'desc',
         }
     })
-    .then(userDetail => {
-        if (!userDetail?.daftarAnak) {
+    .then(daftarAnak => {
+        if (daftarAnak.length === 0) {
             res.send({
                 success: true,
                 message : 'Wah kamu masih belum punya anak nih ayo input data anak atau bikin anak dulu'
             })
             return 
         }
+        
         res.send({
             success: true,
             message: 'Ini daftar anak kamu yah kalo mau nambah bisa sama admin aja hehe.',
-            data: userDetail?.daftarAnak
+            data: daftarAnak
         })
     })
 }
