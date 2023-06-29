@@ -115,11 +115,31 @@ export const getAllHistoryStuntingByAnakId = async (req: Request, res: Response)
             timestamp: 'desc',
         }
     })
-    .then(history => {
+    .then(async history => {
+        const newHistory = []
+        
+        const anak = await prisma.anak.findUnique({ where: { id: anakId }})
+        const birthDate = moment(anak?.tanggalLahir)
+        for (const detail of history) {
+            const historyDate = moment(detail.timestamp)
+            const selisihHari = historyDate.diff(birthDate)
+
+            const newData = {
+                id: detail.id,
+                anakId: detail.anakId,
+                result: detail.result,
+                timestamp: detail.timestamp,
+                tinggiBadan: detail.tinggiBadan,
+                umur: `${selisihHari} hari`
+            }
+
+            newHistory.push(newData)
+        }
+
         res.send({
             success: true,
             message: 'Ini yah riwayat stunting anak anda',
-            data: history
+            data: newHistory
         })
     })
     .catch(err => {
