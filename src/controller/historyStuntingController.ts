@@ -122,7 +122,11 @@ export const getAllHistoryStuntingByAnakId = async (req: Request, res: Response)
         const birthDate = moment(anak?.tanggalLahir)
         for (const detail of history) {
             const historyDate = moment(detail.timestamp)
-            const selisihHari = historyDate.diff(birthDate)
+            const selisihHari = historyDate.diff(birthDate, 'days')
+
+            console.log(birthDate)
+            console.log(historyDate)
+            console.log(selisihHari)
 
             const newData = {
                 id: detail.id,
