@@ -20,10 +20,45 @@ export const getAllHistoryGizi = async (req: Request, res: Response) => {
         }
     })
     .then( historyGizi => {
+
+        const noCommaData = []
+
+        for (const history of historyGizi) {
+            const temp = {
+                id: history.id,
+                anakId: history.anakId,
+                ibuId: history.ibuId,
+                timastamp: history.timastamp,
+                foodUrl: history.foodUrl,
+                namaMakanan: history.namaMakanan,
+                persentaseHabis: history.persentaseHabis,
+                VitA: Math.floor(history.VitA*100) / 100,    
+                VitB1: Math.floor(history.VitB1*100) / 100,    
+                VitB2: Math.floor(history.VitB2*100) / 100,    
+                VitB3: Math.floor(history.VitB3*100) / 100,    
+                VitC: Math.floor(history.VitC*100) / 100,    
+                Energi: Math.floor(history.Energi*100) / 100,    
+                Protein: Math.floor(history.Protein*100) / 100,    
+                Lemak: Math.floor(history.Lemak*100) / 100,    
+                Karbohidrat: Math.floor(history.Karbohidrat*100) / 100,    
+                Serat: Math.floor(history.Serat*100) / 100,    
+                Air: Math.floor(history.Air*100) / 100,    
+                Ca: Math.floor(history.Ca*100) / 100,    
+                F: Math.floor(history.F*100) / 100,    
+                Fe2: Math.floor(history.Fe2*100) / 100,    
+                Zn2: Math.floor(history.Zn2*100) / 100,    
+                Ka: Math.floor(history.Ka*100) / 100,    
+                Na: Math.floor(history.Na*100) / 100,    
+                Cu: Math.floor(history.Cu*100) / 100,    
+            }
+
+            noCommaData.push(temp)
+        }
+
         res.send({
             success: true,
             message: 'Inilah History Kamu',
-            data: historyGizi,
+            data: noCommaData,
         })
     })
     .catch(err => {
@@ -177,16 +212,45 @@ export const deleteHistoryGiziById = async(req: Request, res: Response) => {
 export const getHistoryGiziById = async(req: Request, res: Response) => {
     const { id } = req.params
 
-    await prisma.historyGizi.findUnique({
+    await prisma.historyGizi.findUniqueOrThrow({
         where: {
             id: id,
         }
     })
     .then(history => {
+
+        const noCommaData = {
+            id: history.id,
+            anakId: history.anakId,
+            ibuId: history.ibuId,
+            timastamp: history.timastamp,
+            foodUrl: history.foodUrl,
+            namaMakanan: history.namaMakanan,
+            persentaseHabis: history.persentaseHabis,
+            VitA: Math.floor(history.VitA*100) / 100,    
+            VitB1: Math.floor(history.VitB1*100) / 100,    
+            VitB2: Math.floor(history.VitB2*100) / 100,    
+            VitB3: Math.floor(history.VitB3*100) / 100,    
+            VitC: Math.floor(history.VitC*100) / 100,    
+            Energi: Math.floor(history.Energi*100) / 100,    
+            Protein: Math.floor(history.Protein*100) / 100,    
+            Lemak: Math.floor(history.Lemak*100) / 100,    
+            Karbohidrat: Math.floor(history.Karbohidrat*100) / 100,    
+            Serat: Math.floor(history.Serat*100) / 100,    
+            Air: Math.floor(history.Air*100) / 100,    
+            Ca: Math.floor(history.Ca*100) / 100,    
+            F: Math.floor(history.F*100) / 100,    
+            Fe2: Math.floor(history.Fe2*100) / 100,    
+            Zn2: Math.floor(history.Zn2*100) / 100,    
+            Ka: Math.floor(history.Ka*100) / 100,    
+            Na: Math.floor(history.Na*100) / 100,    
+            Cu: Math.floor(history.Cu*100) / 100,    
+        }
+
         res.send({
             success: true,
             message: 'Ini data detail history gizi nya ya sayang',
-            data: history,
+            data: noCommaData,
         })
     })
     .catch(err => {
@@ -281,12 +345,40 @@ export const createHistoryGizi = async(req: Request, res: Response) => {
             }
         })
         .then(history => {
+            const noCommaData = {
+                id: history.id,
+                anakId: history.anakId,
+                ibuId: history.ibuId,
+                timastamp: history.timastamp,
+                foodUrl: history.foodUrl,
+                namaMakanan: history.namaMakanan,
+                persentaseHabis: history.persentaseHabis,
+                VitA: Math.floor(history.VitA*100) / 100,    
+                VitB1: Math.floor(history.VitB1*100) / 100,    
+                VitB2: Math.floor(history.VitB2*100) / 100,    
+                VitB3: Math.floor(history.VitB3*100) / 100,    
+                VitC: Math.floor(history.VitC*100) / 100,    
+                Energi: Math.floor(history.Energi*100) / 100,    
+                Protein: Math.floor(history.Protein*100) / 100,    
+                Lemak: Math.floor(history.Lemak*100) / 100,    
+                Karbohidrat: Math.floor(history.Karbohidrat*100) / 100,    
+                Serat: Math.floor(history.Serat*100) / 100,    
+                Air: Math.floor(history.Air*100) / 100,    
+                Ca: Math.floor(history.Ca*100) / 100,    
+                F: Math.floor(history.F*100) / 100,    
+                Fe2: Math.floor(history.Fe2*100) / 100,    
+                Zn2: Math.floor(history.Zn2*100) / 100,    
+                Ka: Math.floor(history.Ka*100) / 100,    
+                Na: Math.floor(history.Na*100) / 100,    
+                Cu: Math.floor(history.Cu*100) / 100,    
+            }
+
             res.send({
                 success: true,
                 message: 'History gizi telah berhasil dibuat',
                 data: {
                     class: classLabel,
-                    detail: history
+                    detail: noCommaData
                 }
             })
         })
@@ -403,9 +495,38 @@ export const inputMakananManual  = async(req: Request, res: Response) => {
         }
     })
     .then(history => {
+        const noCommaData = {
+            id: history.id,
+            anakId: history.anakId,
+            ibuId: history.ibuId,
+            timastamp: history.timastamp,
+            foodUrl: history.foodUrl,
+            namaMakanan: history.namaMakanan,
+            persentaseHabis: history.persentaseHabis,
+            VitA: Math.floor(history.VitA*100) / 100,    
+            VitB1: Math.floor(history.VitB1*100) / 100,    
+            VitB2: Math.floor(history.VitB2*100) / 100,    
+            VitB3: Math.floor(history.VitB3*100) / 100,    
+            VitC: Math.floor(history.VitC*100) / 100,    
+            Energi: Math.floor(history.Energi*100) / 100,    
+            Protein: Math.floor(history.Protein*100) / 100,    
+            Lemak: Math.floor(history.Lemak*100) / 100,    
+            Karbohidrat: Math.floor(history.Karbohidrat*100) / 100,    
+            Serat: Math.floor(history.Serat*100) / 100,    
+            Air: Math.floor(history.Air*100) / 100,    
+            Ca: Math.floor(history.Ca*100) / 100,    
+            F: Math.floor(history.F*100) / 100,    
+            Fe2: Math.floor(history.Fe2*100) / 100,    
+            Zn2: Math.floor(history.Zn2*100) / 100,    
+            Ka: Math.floor(history.Ka*100) / 100,    
+            Na: Math.floor(history.Na*100) / 100,    
+            Cu: Math.floor(history.Cu*100) / 100,    
+        }
+
         res.send({
             success: true,
             message: 'Histry Gizi berhasil di update',
+            data: noCommaData
         })
     })
     .catch(err => {
