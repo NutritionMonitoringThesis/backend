@@ -16,9 +16,22 @@ export const getStandardGizi = async (req:Request, res:Response) => {
         await prisma.userDetails.findUnique({
             where : {
                 userId: userId
+            },
+            include: {
+                historyKehamilan: {
+                    where: {
+                        lahir: 'BELUM'
+                    },
+                    orderBy: {
+                        tanggalHamil: 'desc'
+                    },
+                },
             }
         })
-        .then(userDetails => {
+        .then(async userDetails => {
+
+            console.log(userDetails?.historyKehamilan)
+
             const tanggalLahir = userDetails?.tanggalLahir
             const tahunLahir = tanggalLahir?.getFullYear() as number
             const tanggalNow = new Date
@@ -36,7 +49,7 @@ export const getStandardGizi = async (req:Request, res:Response) => {
                 kelompok = 'Perempuan'
             }
     
-            prisma.standarGizi.findFirst({
+            await prisma.standarGizi.findFirstOrThrow({
                 where : {
                     akhirRentang : { gte : umur},
                     awalRentang : { lte : umur},
@@ -46,9 +59,65 @@ export const getStandardGizi = async (req:Request, res:Response) => {
                     standarGiziDetail : true
                 }
             })
-            .then (data => {
+            .then (async data => {
                 // Tambahin standar kalo ibunya hamil 
 
+                if (userDetails?.historyKehamilan.length as number > 0) {
+                    // calculate umur kehamilan 
+                    const today = moment()
+                    const bulanKehamilan = today.diff(tanggalLahir, 'months')
+
+                    if (bulanKehamilan > 9) {
+                        res.send({
+                            success: false, 
+                            message: 'Wah ini usia kandungan sudah lewat dari 9 bulan jadi ini gizi tanpa kehamilan',
+                            data: data
+                        })
+                        return 
+                    }
+
+                    // get standar kehamilan 
+                    const standarKehamilan = await prisma.standarGizi.findFirstOrThrow({
+                        where: {
+                            satuan: 'bulan',
+                            akhirRentang: { gte: umur },
+                            awalRentang: { lte: umur },
+                        },
+                        include: {
+                            standarGiziDetail: true,
+                        }
+                    })
+
+                    // let tempData = data 
+
+                    // tempData.standarGiziDetail.VitA  = (tempData.standarGiziDetail?.VitA as number + (standarKehamilan.standarGiziDetail?.VitA as number)) as number  
+                    // tempData.standarGiziDetail.VitB1  = (tempData.standarGiziDetail?.VitB1 as number + (standarKehamilan.standarGiziDetail?.VitB1 as number)) as number  
+                    // tempData.standarGiziDetail.VitB2  = (tempData.standarGiziDetail?.VitB2 as number + (standarKehamilan.standarGiziDetail?.VitB2 as number)) as number  
+                    // tempData.standarGiziDetail.VitB3  = (tempData.standarGiziDetail?.VitB3 as number + (standarKehamilan.standarGiziDetail?.VitB3 as number)) as number  
+                    // tempData.standarGiziDetail.VitC  = (tempData.standarGiziDetail?.VitC as number + (standarKehamilan.standarGiziDetail?.VitC as number)) as number  
+                    // tempData.standarGiziDetail.Energi  = (tempData.standarGiziDetail?.Energi as number + (standarKehamilan.standarGiziDetail?.Energi as number)) as number  
+                    // tempData.standarGiziDetail.Protein  = (tempData.standarGiziDetail?.Protein as number + (standarKehamilan.standarGiziDetail?.Protein as number)) as number  
+                    // tempData.standarGiziDetail.Lemak  = (tempData.standarGiziDetail?.Lemak as number + (standarKehamilan.standarGiziDetail?.Lemak as number)) as number  
+                    // tempData.standarGiziDetail.Karbohidrat  = (tempData.standarGiziDetail?.Karbohidrat as number + (standarKehamilan.standarGiziDetail?.Karbohidrat as number)) as number  
+                    // tempData.standarGiziDetail.Serat  = (tempData.standarGiziDetail?.Serat as number + (standarKehamilan.standarGiziDetail?.Serat as number)) as number  
+                    // tempData.standarGiziDetail.Air  = (tempData.standarGiziDetail?.Air as number + (standarKehamilan.standarGiziDetail?.Air as number)) as number  
+                    // tempData.standarGiziDetail.Ca  = (tempData.standarGiziDetail?.Ca as number + (standarKehamilan.standarGiziDetail?.Ca as number)) as number  
+                    // tempData.standarGiziDetail.F  = (tempData.standarGiziDetail?.F as number + (standarKehamilan.standarGiziDetail?.F as number)) as number  
+                    // tempData.standarGiziDetail.Fe2  = (tempData.standarGiziDetail?.Fe2 as number + (standarKehamilan.standarGiziDetail?.Fe2 as number)) as number  
+                    // tempData.standarGiziDetail.Zn2  = (tempData.standarGiziDetail?.Zn2 as number + (standarKehamilan.standarGiziDetail?.Zn2 as number)) as number  
+                    // tempData.standarGiziDetail.Ka  = (tempData.standarGiziDetail?.Ka as number + (standarKehamilan.standarGiziDetail?.Ka as number)) as number  
+                    // tempData.standarGiziDetail.Na  = (tempData.standarGiziDetail?.Na as number + (standarKehamilan.standarGiziDetail?.Na as number)) as number  
+                    // tempData.standarGiziDetail.Cu  = (tempData.standarGiziDetail?.Cu as number + (standarKehamilan.standarGiziDetail?.Cu as number)) as number  
+
+                    res.send({
+                        success: true, 
+                        message: 'Ini yah data standar gizinya ditambah dengan standar kehamilan',
+                        data: data
+                    })
+                    
+
+                }
+                
                 res.send({
                     success: true, 
                     message: 'Ini yah data standar gizinya.',
