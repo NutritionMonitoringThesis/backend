@@ -11,7 +11,7 @@ export const getStandardGizi = async (req:Request, res:Response) => {
     const userId = getId(token)
     const data = req.query
 
-    if (data.anakId === null) {
+    if (!data.anakId) {
 
         await prisma.userDetails.findUnique({
             where : {
@@ -28,6 +28,7 @@ export const getStandardGizi = async (req:Request, res:Response) => {
             console.log(umur)
             const gender = userDetails?.jenisKelamin
             let kelompok 
+
             if (gender == 'M' ) {
                 kelompok = 'Laki-Laki'
             }
@@ -40,17 +41,17 @@ export const getStandardGizi = async (req:Request, res:Response) => {
                     akhirRentang : { gte : umur},
                     awalRentang : { lte : umur},
                     kelompok : kelompok,
-    
                 },
                 include : {
                     standarGiziDetail : true
                 }
             })
             .then (data => {
-                // console.log(data)
+                // Tambahin standar kalo ibunya hamil 
+
                 res.send({
                     success: true, 
-                    message: 'Ini yah data standar stuntingnya, semoga anak anda tidak stunting hehe.',
+                    message: 'Ini yah data standar gizinya.',
                     data: data
                 })
             })
@@ -75,6 +76,7 @@ export const getStandardGizi = async (req:Request, res:Response) => {
         })
     }
     else {
+        console.log('Anak Nih')
         // Query Standard Anak 
         const { anakId } = req.query
 
@@ -112,7 +114,7 @@ export const getStandardGizi = async (req:Request, res:Response) => {
             kelompok = 'Perempuan'
         }
         
-        let umur 
+        let umur:number 
         let satuan 
 
         if ( year < 1 ) {
@@ -124,15 +126,15 @@ export const getStandardGizi = async (req:Request, res:Response) => {
             satuan = 'tahun'
         }
 
+        if (year < 10) kelompok = 'Bocil'
+
+        console.log(umur + ' ' + satuan + kelompok)
+
         await prisma.standarGizi.findFirst({
             where: {
                 satuan: satuan,
-                akhirRentang: {
-                    gte: umur
-                },
-                awalRentang: {
-                    lte: umur
-                },
+                akhirRentang: { gte: umur },
+                awalRentang: { lte: umur },
                 kelompok: kelompok
             },
             include: {
@@ -157,7 +159,7 @@ export const getStandardGizi = async (req:Request, res:Response) => {
                     return
                 }
             }
-            
+
             res.status(500).send({
                 success: false,
                 message: 'Error Occured Contact Admin'
