@@ -93,7 +93,7 @@ export const deleteHistoryStuntingById = async (req: Request, res: Response) => 
     .then(history => {
         res.send({
             success: true,
-            message: `History Stunting dengan id ${history.id} telah berhasil dihapus`,
+            message: `History Stunting pada ${moment(history.timestamp).locale('id').format('dddd,dd MMMM YYYY')} telah berhasil dihapus`,
         })
     })
     .catch(err => {

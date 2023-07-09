@@ -42,6 +42,9 @@ export const inputHistoryGiziAnakManual = async(req: Request, res: Response) => 
             timastamp: new Date(),
             anakId: id,
             foodUrl: data.foodUrl
+        },
+        include: {
+            anak: true,
         }
     })
     .then(history => {
@@ -71,12 +74,13 @@ export const inputHistoryGiziAnakManual = async(req: Request, res: Response) => 
             Ka: Math.floor(history.Ka*100) / 100,    
             Na: Math.floor(history.Na*100) / 100,    
             Cu: Math.floor(history.Cu*100) / 100,    
+            anak: history.anak,
         }
 
 
         res.send({
             success: true,
-            message: 'Histry Gizi Anak anda berhasil di input',
+            message: `History Gizi ${noCommaData.anak?.namaLengkap} anda berhasil di catat`,
             data: noCommaData
         })
     })

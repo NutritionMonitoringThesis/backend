@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { getId } from "./authController";
+import moment from "moment";
 
 const prisma = new PrismaClient()
 
@@ -151,7 +152,7 @@ export const deleteHistoryKehamilanById = async(req: Request, res: Response) => 
     .then (data => {
         res.send({
             success: true,
-            message: `Data Kehamilan dengan id ${data.id} telah berhasil di hapus. Ayo bisa yok buat anak lagi.`
+            message: `History Kehamilan pada ${moment(data.tanggalHamil).locale('id').format('dddd,dd MMMM YYYY')} telah berhasil di hapus. Ayo bisa yok buat anak lagi.`
         })
     })
     .catch(err => {
