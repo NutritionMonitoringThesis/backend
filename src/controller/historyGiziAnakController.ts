@@ -84,7 +84,7 @@ export const inputHistoryGiziAnakManual = async(req: Request, res: Response) => 
             data: noCommaData
         })
     })
-    .catch(err => {
+    .catch(err => {  
         console.log(err)
         res.status(500).send({
             success: false,
@@ -98,10 +98,44 @@ export const getAllHistoryGiziByAnakId = async (req: Request, res: Response) => 
     const token = req.headers['auth'] as string
     const { id } = req.params
 
-    await prisma.historyGizi.findMany({
-        where: {
+    const data = req.query
+
+    let start:Date = new Date()
+    let end:Date = new Date()
+    let current = start 
+
+    // console.log(typeof(data.date))
+    console.log(start)
+    console.log(data)
+
+    if (Array.isArray(data.date)) {
+        start = new Date(data.date[0] as string)
+        end = new Date(data.date[1] as string)
+    }
+
+    console.log(start)
+
+    let whereConfig= {}
+
+    if (start === current) {
+        whereConfig = {
             anakId: id,
-        },
+        }
+    }
+    else {
+        whereConfig = {
+            anakId: id,
+            timastamp: {
+                gte: start,
+                lte: end,
+            }
+        }
+    }
+
+    console.log(whereConfig)
+
+    await prisma.historyGizi.findMany({
+        where: whereConfig,
         orderBy: {
             timastamp: 'desc',
         }

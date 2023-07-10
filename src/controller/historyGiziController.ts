@@ -10,11 +10,44 @@ const prisma = new PrismaClient()
 export const getAllHistoryGizi = async (req: Request, res: Response) => {
     const token = req.headers['auth'] as string
     const userId = getId(token)
+    const data = req.query
+
+    let start:Date = new Date()
+    let end:Date = new Date()
+    let current = start 
+
+    // console.log(typeof(data.date))
+    console.log(start)
+    console.log(data)
+
+    if (Array.isArray(data.date)) {
+        start = new Date(data.date[0] as string)
+        end = new Date(data.date[1] as string)
+    }
+
+    console.log(start)
+
+    let whereConfig= {}
+
+    if (start === current) {
+        whereConfig = {
+            ibuId: userId,
+        }
+    }
+    else {
+        whereConfig = {
+            ibuId: userId,
+            timastamp: {
+                gte: start,
+                lte: end,
+            }
+        }
+    }
+
+    console.log(whereConfig)
 
     await prisma.historyGizi.findMany({
-        where: {
-            ibuId: userId,
-        },
+        where: whereConfig,
         orderBy: {
             timastamp: 'desc',
         }
