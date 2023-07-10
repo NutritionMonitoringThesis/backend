@@ -63,15 +63,17 @@ export const getStandardGizi = async (req:Request, res:Response) => {
                 // Tambahin standar kalo ibunya hamil 
 
                 if (userDetails?.historyKehamilan.length as number > 0) {
+                    console.log('Wah HAmil Nih ')
                     // calculate umur kehamilan 
                     const today = moment()
-                    const bulanKehamilan = today.diff(tanggalLahir, 'months')
+                    const bulanKehamilan = today.diff(today, 'months')
+                    console.log(bulanKehamilan)
 
                     if (bulanKehamilan > 9) {
                         res.send({
                             success: false, 
                             message: 'Wah ini usia kandungan sudah lewat dari 9 bulan jadi ini gizi tanpa kehamilan',
-                            data: data
+                            // data: data
                         })
                         return 
                     }
@@ -79,42 +81,51 @@ export const getStandardGizi = async (req:Request, res:Response) => {
                     // get standar kehamilan 
                     const standarKehamilan = await prisma.standarGizi.findFirstOrThrow({
                         where: {
-                            satuan: 'bulan',
-                            akhirRentang: { gte: umur },
-                            awalRentang: { lte: umur },
+                            // satuan: 'bulan',
+                            akhirRentang: { gte: bulanKehamilan },
+                            awalRentang: { lte: bulanKehamilan },
+                            kelompok: 'Hamil'
                         },
                         include: {
                             standarGiziDetail: true,
                         }
                     })
 
-                    // let tempData = data 
+                    console.log(standarKehamilan)
 
-                    // tempData.standarGiziDetail.VitA  = (tempData.standarGiziDetail?.VitA as number + (standarKehamilan.standarGiziDetail?.VitA as number)) as number  
-                    // tempData.standarGiziDetail.VitB1  = (tempData.standarGiziDetail?.VitB1 as number + (standarKehamilan.standarGiziDetail?.VitB1 as number)) as number  
-                    // tempData.standarGiziDetail.VitB2  = (tempData.standarGiziDetail?.VitB2 as number + (standarKehamilan.standarGiziDetail?.VitB2 as number)) as number  
-                    // tempData.standarGiziDetail.VitB3  = (tempData.standarGiziDetail?.VitB3 as number + (standarKehamilan.standarGiziDetail?.VitB3 as number)) as number  
-                    // tempData.standarGiziDetail.VitC  = (tempData.standarGiziDetail?.VitC as number + (standarKehamilan.standarGiziDetail?.VitC as number)) as number  
-                    // tempData.standarGiziDetail.Energi  = (tempData.standarGiziDetail?.Energi as number + (standarKehamilan.standarGiziDetail?.Energi as number)) as number  
-                    // tempData.standarGiziDetail.Protein  = (tempData.standarGiziDetail?.Protein as number + (standarKehamilan.standarGiziDetail?.Protein as number)) as number  
-                    // tempData.standarGiziDetail.Lemak  = (tempData.standarGiziDetail?.Lemak as number + (standarKehamilan.standarGiziDetail?.Lemak as number)) as number  
-                    // tempData.standarGiziDetail.Karbohidrat  = (tempData.standarGiziDetail?.Karbohidrat as number + (standarKehamilan.standarGiziDetail?.Karbohidrat as number)) as number  
-                    // tempData.standarGiziDetail.Serat  = (tempData.standarGiziDetail?.Serat as number + (standarKehamilan.standarGiziDetail?.Serat as number)) as number  
-                    // tempData.standarGiziDetail.Air  = (tempData.standarGiziDetail?.Air as number + (standarKehamilan.standarGiziDetail?.Air as number)) as number  
-                    // tempData.standarGiziDetail.Ca  = (tempData.standarGiziDetail?.Ca as number + (standarKehamilan.standarGiziDetail?.Ca as number)) as number  
-                    // tempData.standarGiziDetail.F  = (tempData.standarGiziDetail?.F as number + (standarKehamilan.standarGiziDetail?.F as number)) as number  
-                    // tempData.standarGiziDetail.Fe2  = (tempData.standarGiziDetail?.Fe2 as number + (standarKehamilan.standarGiziDetail?.Fe2 as number)) as number  
-                    // tempData.standarGiziDetail.Zn2  = (tempData.standarGiziDetail?.Zn2 as number + (standarKehamilan.standarGiziDetail?.Zn2 as number)) as number  
-                    // tempData.standarGiziDetail.Ka  = (tempData.standarGiziDetail?.Ka as number + (standarKehamilan.standarGiziDetail?.Ka as number)) as number  
-                    // tempData.standarGiziDetail.Na  = (tempData.standarGiziDetail?.Na as number + (standarKehamilan.standarGiziDetail?.Na as number)) as number  
-                    // tempData.standarGiziDetail.Cu  = (tempData.standarGiziDetail?.Cu as number + (standarKehamilan.standarGiziDetail?.Cu as number)) as number  
+                    let tempData = {
+                        id: data.id,
+                        standarGiziDetail: {
+                            standardGiziId: data.standarGiziDetail?.standardGiziId,
+                            tinggiBadan: 168,
+                            beratBadan: 60,
+                            VitA: (standarKehamilan.standarGiziDetail?.VitA as number) + (data.standarGiziDetail?.VitA as number),
+                            VitB1: (standarKehamilan.standarGiziDetail?.VitB1 as number) + (data.standarGiziDetail?.VitB1 as number),
+                            VitB2: (standarKehamilan.standarGiziDetail?.VitB2 as number) + (data.standarGiziDetail?.VitB2 as number),
+                            VitB3: (standarKehamilan.standarGiziDetail?.VitB3 as number) + (data.standarGiziDetail?.VitB3 as number),
+                            VitC: (standarKehamilan.standarGiziDetail?.VitC as number) + (data.standarGiziDetail?.VitC as number),
+                            Energi: (standarKehamilan.standarGiziDetail?.Energi as number) + (data.standarGiziDetail?.Energi as number),
+                            Protein: (standarKehamilan.standarGiziDetail?.Protein as number) + (data.standarGiziDetail?.Protein as number),
+                            Lemak: (standarKehamilan.standarGiziDetail?.Lemak as number) + (data.standarGiziDetail?.Lemak as number),
+                            Karbohidrat: (standarKehamilan.standarGiziDetail?.Karbohidrat as number) + (data.standarGiziDetail?.Karbohidrat as number),
+                            Serat: (standarKehamilan.standarGiziDetail?.Serat as number) + (data.standarGiziDetail?.Serat as number),
+                            Air: (standarKehamilan.standarGiziDetail?.Air as number) + (data.standarGiziDetail?.Air as number),
+                            Ca: (standarKehamilan.standarGiziDetail?.Ca as number) + (data.standarGiziDetail?.Ca as number),
+                            F: (standarKehamilan.standarGiziDetail?.F as number) + (data.standarGiziDetail?.F as number),
+                            Fe2: (standarKehamilan.standarGiziDetail?.Fe2 as number) + (data.standarGiziDetail?.Fe2 as number),
+                            Zn2: (standarKehamilan.standarGiziDetail?.Zn2 as number) + (data.standarGiziDetail?.Zn2 as number),
+                            Ka: (standarKehamilan.standarGiziDetail?.Ka as number) + (data.standarGiziDetail?.Ka as number),
+                            Na: (standarKehamilan.standarGiziDetail?.Na as number) + (data.standarGiziDetail?.Na as number),
+                            Cu: (standarKehamilan.standarGiziDetail?.Cu as number) + (data.standarGiziDetail?.Cu as number)
+                        }
+                    }  
 
                     res.send({
                         success: true, 
                         message: 'Ini yah data standar gizinya ditambah dengan standar kehamilan',
-                        data: data
+                        data: tempData
                     })
-                    
+                    return
 
                 }
                 
