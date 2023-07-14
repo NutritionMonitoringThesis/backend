@@ -78,6 +78,38 @@ export const deleteAnak = async (req: Request , res: Response) => {
     const token = req.headers['auth'] as string
     const userId = getId(token)
 
+    const anak = await prisma.anak.findUnique({
+        where: {
+            id: anakId
+        },
+        include: {
+            historyGiziHarian: true,
+            historyStunting: true,
+        }
+    })
+    
+    if (anak?.historyStunting === undefined && anak?.historyGiziHarian === undefined) {
+        res.send({
+            success: false,
+            message: 'Data History Stunting dan History Gizi masih ada jadi tidak bisa dihapus'
+        })
+        return
+    }
+    else if (anak?.historyGiziHarian === undefined) {
+        res.send({
+            success: false,
+            message: 'Data History Gizi masih ada jadi tidak bisa dihapus'
+        })
+        return
+    }
+    else if (anak?.historyStunting === undefined) {
+        res.send({
+            success: false,
+            message: 'Data History Stunting masih ada jadi tidak bisa dihapus'
+        })
+        return
+    }
+
     await prisma.anak.delete({
         where : {
             id : anakId
