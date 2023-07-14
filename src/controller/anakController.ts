@@ -83,10 +83,10 @@ export const deleteAnak = async (req: Request , res: Response) => {
             id : anakId
         },
     })
-    .then(() => {
+    .then(anak => {
         res.send({
             success: false,
-            message : `Data dengan id ${anakId} telah berhasil dihapus`
+            message : `Data dengan nama ${anak.namaLengkap} telah berhasil dihapus`
     })
     })
     .catch(err => {
@@ -101,7 +101,7 @@ export const deleteAnak = async (req: Request , res: Response) => {
             else if (err.code == 'P2025') {
                 res.status(404).send({ 
                     success: false,
-                    message : `Data dengan id ${anakId} tidak Ditemukan`
+                    message : `Data anak tidak Ditemukan`
                 })
             }
         }
