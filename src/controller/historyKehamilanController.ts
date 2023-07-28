@@ -25,7 +25,7 @@ export const createKehamilan = async (req: Request, res: Response) => {
     .then(() => {
         res.send({
             success: true,
-            message: 'Data Kehamilan telah berhasil di input. Akhirnya bisa enak enak lagi'
+            message: 'Data Kehamilan telah berhasil di input. Semoga lancar hingga proses persalinan'
         })
     })
     .catch(err => {
@@ -55,7 +55,7 @@ export const updateHistoryKehamilanById = async (req: Request, res: Response) =>
     .then(historyKehamilan => {
         res.send({
             success: true,
-            message: 'Data kehamilan sudah berhasil di update. Anaknya udah lahir ya? Dah bisa enak enak lagi tuh si bapake hehe.'
+            message: 'Data kehamilan sudah berhasil di update.'
         })
     })
     .catch(err => {
