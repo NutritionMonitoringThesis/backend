@@ -135,6 +135,7 @@ export const updateUserDetail = async (req : Request, res : Response) => {
     const data = req.body 
     const token = req.headers['auth'] as string
     const userId = getId(token)
+    console.log(data)
 
     await prisma.userDetails.update({
         where : {
@@ -143,24 +144,30 @@ export const updateUserDetail = async (req : Request, res : Response) => {
         data : {
             jenisKelamin : data?.jenisKelamin,
             namaLengkap : data?.namaLengkap,
-            tanggalLahir : data?.tanggalLahir as Date,
+            tanggalLahir : new Date(data?.tanggalLahir),
             tempatLahir : data?.tempatLahir            
         }
     }).then (userDetails => {
+        console.log('Update')
         res.send({ 
             success: true,
-            message : `${userDetails.namaLengkap} berhasil diperbaharui.`
+            message : `Data ${userDetails.namaLengkap} berhasil diperbaharui.`
         })
     }).catch (err => {
-        res.send(err)
+        console.log(err)
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code == 'P2015') {
                 res.status(404).send({
                     success: false,
                     message : 'Not Found!'
                 })
+                return 
             }
         }
+        res.status(500).send({
+            success: false,
+            message: 'Error Occured Contact Admin'
+        })
     })
 }
 
