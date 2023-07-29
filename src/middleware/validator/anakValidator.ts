@@ -1,5 +1,6 @@
 import {check} from 'express-validator'
 import { validator } from './baseValidator'
+import { JenisKelamin } from '@prisma/client'
 
 export const createAnakValidator = [
     [
@@ -22,6 +23,10 @@ export const updateAnakValidator = [
     [
         check('namaLengkap')
         .optional(),
+        check('jenisKelamin')
+        .optional()
+        .isIn(Object.values(JenisKelamin))
+        .withMessage('Jenis Kelamin tidak Valid'),
         check('tanggalLahir')
         .optional()
         .isDate()

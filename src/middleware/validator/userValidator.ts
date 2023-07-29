@@ -57,9 +57,7 @@ export const updateUserValidator = [
         .isIn(Object.values(JenisKelamin))
         .withMessage('Jenis Kelamin tidak Valid'),
         check('namaLengkap')
-        .optional()
-        .isAlpha()
-        .withMessage('Nama Lengkap hanya boleh terdiri dari huruf'),
+        .optional(),
         check('Tanggal Lahir')
         .optional()
         .isDate()

@@ -53,6 +53,7 @@ export const updateAnak = async (req : Request, res : Response ) => {
         data : {
             namaLengkap : data?.namaLengkap,
             tanggalLahir : data?.tanggalLahir,
+            jenisKelamin: data?.jenisKelamin,
             tempatLahir : data?.tempatLahir
         }
     })
