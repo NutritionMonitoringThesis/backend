@@ -86,7 +86,7 @@ export const getAllHistoryKehamilan = async(req: Request, res:Response) => {
         if(historyKehamilan.length === 0) {
             res.status(404).send({
                 success: true,
-                message: 'Wah belum ada nih riwayat kehamilannya. Yuk buat anak dulu yuk. Kalo ga ada suami sama admin ajah.'
+                message: 'Wah belum ada nih riwayat kehamilannya.'
             })
             return 
         }
@@ -152,7 +152,7 @@ export const deleteHistoryKehamilanById = async(req: Request, res: Response) => 
     .then (data => {
         res.send({
             success: true,
-            message: `History Kehamilan pada ${moment(data.tanggalHamil).locale('id').format('dddd, D MMMM YYYY')} telah berhasil di hapus. Ayo bisa yok buat anak lagi.`
+            message: `History Kehamilan pada ${moment(data.tanggalHamil).locale('id').format('dddd, D MMMM YYYY')} telah berhasil di hapus.`
         })
     })
     .catch(err => {
