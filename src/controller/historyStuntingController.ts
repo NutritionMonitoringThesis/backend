@@ -68,7 +68,7 @@ export const createHistoryStunting = async(req: Request, res: Response) => {
     .then(history => {
         res.send({
             success: true,
-            message: `${anak?.namaLengkap} talah berhasil di catat dengan status ${status}`,
+            message: `${anak?.namaLengkap} telah berhasil di catat dengan status ${status}`,
             data: history,
         })
     })
