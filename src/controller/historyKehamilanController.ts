@@ -10,6 +10,23 @@ export const createKehamilan = async (req: Request, res: Response) => {
     const token = req.headers['auth'] as string 
     const userId = getId(token)
 
+    // Check if have a history kehamilan exist or usia kehamilan > 9 bulan 
+    const historyKehamilan = await prisma.historyKehamilan.findMany({
+        where: {
+            userDetailId: userId,
+            tanggalKelahiran: null,
+            lahir: "BELUM"
+        }
+    })
+
+    if (historyKehamilan.length > 0) {
+        res.send({
+            success: false,
+            message: 'Wah Masih ada riwayat kehamilan aktif nih. Yuk dihapus atau diubah dulu statusnya baru buat data kehamilan lagi'
+        })
+        return 
+    }
+
     await prisma.historyKehamilan.create({
         data: {
             lahir: data.lahir,
