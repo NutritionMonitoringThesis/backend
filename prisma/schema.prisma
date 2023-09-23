@@ -178,10 +178,10 @@ model StandardStunting {
 
 model EducationArticle {
   id          String        @id @default(uuid())
-  author      String 
-  title       String 
-  desc        String 
-  urlToImage  String 
-  content     String 
+  author      String        @db.LongText
+  title       String        @db.LongText
+  desc        String        @db.LongText
+  urlToImage  String        @db.LongText
+  content     String        @db.LongText
   publishedAt DateTime
 }

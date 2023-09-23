@@ -36,34 +36,34 @@ async function main () {
     // }
     // console.log('Standard Gizi Sudah Diseed sebanyak ' + listGiziNew.length)
 
-    for (const data of standardGiziList) {
-        await prisma.standarGizi.create({
-            data : data
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
-    console.log('Standard Gizi New Sudah Diseed sebanyak ' + standardGiziList.length)
+    // for (const data of standardGiziList) {
+    //     await prisma.standarGizi.create({
+    //         data : data
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // }
+    // console.log('Standard Gizi New Sudah Diseed sebanyak ' + standardGiziList.length)
     
-    for (const data of giziMakananList) {
-        await prisma.giziMakanan.create({
-            data : data
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
+    // for (const data of giziMakananList) {
+    //     await prisma.giziMakanan.create({
+    //         data : data
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // }
     
-    console.log(`Standard Stunting List berhasil diinput sebanyak ${StandardStuntingList.length}`)
-    for (const data of StandardStuntingList ) {
-        await prisma.standardStunting.create({
-            data : data
-        })
-        .catch(err => {
-            console.log(err)
-        })
-    }
+    // console.log(`Standard Stunting List berhasil diinput sebanyak ${StandardStuntingList.length}`)
+    // for (const data of StandardStuntingList ) {
+    //     await prisma.standardStunting.create({
+    //         data : data
+    //     })
+    //     .catch(err => {
+    //         console.log(err)
+    //     })
+    // }
 
     console.log(`Artikel telah di input sebanyak ${educationArticleList.length} buah artikel penuh Hoax!`)
     for (const data of educationArticleList) {
